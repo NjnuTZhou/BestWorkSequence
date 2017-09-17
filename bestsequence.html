@@ -1,0 +1,161 @@
+<html>
+<body onload="cal()">
+  <h1 align="center">最佳工作序列</h1>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <table border="1"  align="center" style="text-align:center;" >
+  <tr>
+  <td>工作序号</td>
+  <td>花费时间</td>
+  <td>截止时间</td>
+  <td>价值</td>
+  </tr>
+   <tr>
+  <td>1</td>
+  <td>4</td>
+  <td>10</td>
+  <td>2</td>
+  </tr>
+  <tr>
+  <td>2</td>
+  <td>3</td>
+  <td>8</td>
+  <td>3</td>
+  </tr>
+  <tr>
+  <td>3</td>
+  <td>2</td>
+  <td>4</td>
+  <td>3</td>
+  </tr>
+  <tr>
+  <td>4</td>
+  <td>1</td>
+  <td>2</td>
+  <td>6</td>
+  </tr>
+  </table>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <p id="seq" align="center"></p>
+  <p id="value" align="center"></p>
+  </body>
+  <script>
+      function workinfo(id,time,deadline,value)
+	  {this.id=id;this.time=time;this.deadline=deadline;this.value=value};
+	  function bestse(id0,id1,id2,id3,value)
+	  {
+		  this.id0=id0;
+		  this.id1=id1;
+		  this.id2=id2;
+		  this.id3=id3;
+		  this.value=value;
+	  
+	  }
+	  var s0=new workinfo(1,4,10,2);
+	  var s1=new workinfo(2,3,8,3);
+	  var s2=new workinfo(3,2,4,3);
+	  var s3=new workinfo(4,1,2,6);
+	  var work=new Array();
+	  work[0]=s0;
+	  work[1]=s1;
+	  work[2]=s2;
+	  work[3]=s3;
+	  
+	  var workseq=new Array();
+	  var maxvalue=0;
+	  var sss=0;
+	  function sort()
+	  {
+		  var temp=new workinfo();
+		  for(var i=0;i<4;i++){
+			  for(var j=0;j<3-i;j++){
+				  if(work[j].deadline>work[j+1].deadline){
+					  temp=work[j];
+					  work[j]=work[j+1];
+					  work[j+1]=temp;
+				  }
+			  }
+		  }
+	  }
+	  function cal()
+	  {
+		  var count=0;
+		  sort();
+		  for(var i=0;i<4;i++)
+		  {
+		  //alert(i);
+			  workseq[count]=new bestse(0,0,0,0,0);
+			  workseq[count].id0=work[i].id;
+			  workseq[count].value+=work[i].value;
+			  count++;
+			  for (var j = i + 1; j < 4; j++)
+              {
+			  //alert(j);
+                  if (work[i].time + work[j].time <= work[j].deadline)
+                  {
+
+                      workseq[count]=new bestse(0,0,0,0,0);
+					  workseq[count].id0=work[i].id;
+			          workseq[count].value+=work[i].value;
+					  
+					  workseq[count].id1=work[j].id;
+			          workseq[count].value+=work[j].value;
+			          count++;
+                      for (var m = j + 1; m < 4; m++)
+                      {
+					  //alert(m);
+                          if (work[i].time + work[j].time + work[m].time <= work[m].deadline)
+                          {
+                              workseq[count]=new bestse(0,0,0,0,0);
+							  workseq[count].id0=work[i].id;
+							  workseq[count].value+=work[i].value;
+							  
+							  workseq[count].id1=work[j].id;
+							  workseq[count].value+=work[j].value;
+							  
+							  workseq[count].id2=work[m].id;
+							  workseq[count].value+=work[m].value;
+							  count++;
+                              for (var n = m + 1; n < 4; n++)
+                              { 
+							  //alert(n);
+                                  if (work[i].time + work[j].time + work[m].time + work[n].time <= work[n].deadline)
+                                  {
+								      workseq[count]=new bestse(0,0,0,0,0);
+									  workseq[count].id0=work[i].id;
+									  workseq[count].value+=work[i].value;
+									  
+									  workseq[count].id1=work[j].id;
+									  workseq[count].value+=work[j].value;
+									  
+									  workseq[count].id2=work[m].id;
+									  workseq[count].value+=work[m].value;
+									  
+									  workseq[count].id3=work[n].id;
+									  workseq[count].value+=work[n].value;
+									  count++;
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }
+		  }
+		  for (var i = 0; i < workseq.length; i++)
+          {
+              if (workseq[i].value > maxvalue)
+              {
+                  maxvalue = workseq[i].value;
+                  sss = i;
+              }
+          }
+		  document.getElementById("seq").innerHTML="最佳工作序列为:"+workseq[sss].id0+","+workseq[sss].id1+","+workseq[sss].id2+","+workseq[sss].id3;
+	      document.getElementById("value").innerHTML="价值为:"+workseq[sss].value;
+	  }
+
+
+  </script>
+</html>
